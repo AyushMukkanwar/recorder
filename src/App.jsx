@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Mic, Square, Copy, Save, Check, Loader, Pause, Play } from 'lucide-react';
+import { Mic, Square, Copy, Save, Check, Loader, Pause, Play, Trash2 } from 'lucide-react';
 
 const App = () => {
   // 'idle' | 'connecting' | 'recording' | 'paused'
@@ -177,6 +177,12 @@ const App = () => {
     setStatus('idle');
   };
 
+  const clearTranscript = () => {
+    setTranscript('');
+    setInterimTranscript('');
+    setIsCopied(false);
+  };
+
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(transcript + interimTranscript);
@@ -316,16 +322,27 @@ const App = () => {
               onClick={copyToClipboard}
               disabled={!transcript && !interimTranscript}
               title="Copy to clipboard"
+              aria-label="Copy to clipboard"
             >
               {isCopied ? <Check size={20} className="success-icon" /> : <Copy size={20} />}
             </button>
             <button 
-              className="action-btn" 
+              className="action-btn save-btn" 
               onClick={saveToFile}
               disabled={!transcript && !interimTranscript}
               title="Save to file"
+              aria-label="Save to file"
             >
               <Save size={20} />
+            </button>
+            <button 
+              className="action-btn clear-btn" 
+              onClick={clearTranscript}
+              disabled={!transcript && !interimTranscript}
+              title="Clear transcript"
+              aria-label="Clear transcript"
+            >
+              <Trash2 size={20} />
             </button>
           </div>
         </div>
